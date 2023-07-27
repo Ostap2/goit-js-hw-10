@@ -1,79 +1,99 @@
-import axios from "axios";
 import SlimSelect from "slim-select";
+import axios from "axios";
 import Notiflix from "notiflix";
 
+axios.defaults.headers.common["x-api-key"] = "твій ключ";
 
-const API_KEY = "твій ключ";
-axios.defaults.headers.common["x-api-key"] = API_KEY;
+const breedSelect = document.querySelector(".breed-select");
+const catInfo = document.querySelector(".cat-info");
+const catImage = document.createElement("img");
+const catName = document.createElement("h2");
+const catDescription = document.createElement("p");
+const catTemperament = document.createElement("p");
+const loader = document.querySelector(".loader");
+const error = document.querySelector(".error");
+
+catInfo.style.display = "none";
+error.style.display = "none";
+
+function showLoader() {
+  loader.style.display = "block";
+}
+
+function hideLoader() {
+  loader.style.display = "none";
+}
+
+function showError() {
+  error.style.display = "block";
+}
+
+function clearCatInfo() {
+  catImage.src = "";
+  catName.textContent = "";
+  catDescription.textContent = "";
+  catTemperament.textContent = "";
+}
+
+function fetchBreeds() {
+  return axios
+    .get("https://api.thecatapi.com/v1/breeds")
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+function fetchCatByBreed(breedId) {
+  return axios
+    .get(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`)
+    .then((response) => response.data[0])
+    .catch((error) => {
+      throw error;
+    });
+}
 
 
-async function fetchBreeds() {
-  try {
-    const response = await axios.get("https://api.thecatapi.com/v1/breeds");
-    const breeds = response.data.map(breed => ({
-      value: breed.id,
-      text: breed.name
-    }));
+fetchBreeds()
+  .then((breeds) => {
+    breedSelect.innerHTML = breeds
+      .map((breed) => `<option value="${breed.id}">${breed.name}</option>`)
+      .join("");
 
-
-    const breedSelect = document.querySelector(".breed-select");
-    const select = new SlimSelect({
+    new SlimSelect({
       select: breedSelect,
-      data: breeds
     });
-
-    return breeds;
-  } catch (error) {
-    console.error("Error fetching breeds:", error);
-    throw error;
-  }
-}
+  })
+  .catch(() => {
+    showError();
+  });
 
 
-async function fetchCatByBreed(breedId) {
-  try {
-    const response = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`);
-    const catInfo = response.data[0].breeds[0];
+breedSelect.addEventListener("change", (event) => {
+  const breedId = event.target.value;
 
+  showLoader();
 
-    const catInfoContainer = document.querySelector(".cat-info");
-    catInfoContainer.innerHTML = `
-      <img src="${response.data[0].url}" alt="Cat Image">
-      <h2>${catInfo.name}</h2>
-      <p>Description: ${catInfo.description}</p>
-      <p>Temperament: ${catInfo.temperament}</p>
-    `;
-  } catch (error) {
-    console.error("Error fetching cat info:", error);
-    Notiflix.Notify.failure("Error fetching cat info");
-    throw error;
-  }
-}
+  fetchCatByBreed(breedId)
+    .then((cat) => {
+      hideLoader();
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const loader = document.querySelector(".loader");
-  const error = document.querySelector(".error");
-  const breedSelect = document.querySelector(".breed-select");
-  const catInfoContainer = document.querySelector(".cat-info");
+      clearCatInfo();
 
-  try {
+      catImage.src = cat.url;
+      catName.textContent = `Breed: ${cat.breeds[0].name}`;
+      catDescription.textContent = `Description: ${cat.breeds[0].description}`;
+      catTemperament.textContent = `Temperament: ${cat.breeds[0].temperament}`;
 
-    loader.style.display = "block";
-    const breeds = await fetchBreeds();
-    loader.style.display = "none";
+      catInfo.appendChild(catImage);
+      catInfo.appendChild(catName);
+      catInfo.appendChild(catDescription);
+      catInfo.appendChild(catTemperament);
 
-
-    breedSelect.addEventListener("change", async (event) => {
-      const selectedBreedId = event.target.value;
-
-      loader.style.display = "block";
-      catInfoContainer.style.display = "none";
-      await fetchCatByBreed(selectedBreedId);
-      loader.style.display = "none";
-      catInfoContainer.style.display = "block";
+      catInfo.style.display = "block";
+    })
+    .catch(() => {
+      hideLoader();
+      showError();
     });
-  } catch (error) {
-    loader.style.display = "none";
-    error.style.display = "block";
-  }
 });
