@@ -1,6 +1,5 @@
 import SlimSelect from "slim-select";
 import axios from "axios";
-import Notiflix from "notiflix";
 
 axios.defaults.headers.common["x-api-key"] = "твій ключ";
 
@@ -25,7 +24,7 @@ function hideLoader() {
 }
 
 function showError() {
-  error.style.display = "block";
+  alert("Oops! Something went wrong! Try reloading the page!");
 }
 
 function clearCatInfo() {
@@ -53,7 +52,6 @@ function fetchCatByBreed(breedId) {
     });
 }
 
-
 fetchBreeds()
   .then((breeds) => {
     breedSelect.innerHTML = breeds
@@ -67,7 +65,6 @@ fetchBreeds()
   .catch(() => {
     showError();
   });
-
 
 breedSelect.addEventListener("change", (event) => {
   const breedId = event.target.value;
