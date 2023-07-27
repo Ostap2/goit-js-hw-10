@@ -24,7 +24,7 @@ function hideLoader() {
 }
 
 function showError() {
-  alert("Oops! Something went wrong! Try reloading the page!");
+  error.style.display = "block";
 }
 
 function clearCatInfo() {
@@ -58,9 +58,7 @@ fetchBreeds()
       .map((breed) => `<option value="${breed.id}">${breed.name}</option>`)
       .join("");
 
-    new SlimSelect({
-      select: breedSelect,
-    });
+    new SlimSelect(".breed-select");
   })
   .catch(() => {
     showError();
