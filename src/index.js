@@ -5,10 +5,8 @@ axios.defaults.headers.common["x-api-key"] = "твій ключ";
 
 const breedSelect = document.querySelector(".breed-select");
 const catInfo = document.querySelector(".cat-info");
-const catImage = document.createElement("img");
-const catName = document.createElement("h2");
-const catDescription = document.createElement("p");
-const catTemperament = document.createElement("p");
+const catBreed = document.querySelector(".cat-breed");
+const catList = document.querySelector(".cat-list");
 const loader = document.querySelector(".loader");
 const error = document.querySelector(".error");
 
@@ -27,11 +25,8 @@ function showError() {
   error.style.display = "block";
 }
 
-function clearCatInfo() {
-  catImage.src = "";
-  catName.textContent = "";
-  catDescription.textContent = "";
-  catTemperament.textContent = "";
+function clearCatList() {
+  catList.innerHTML = "";
 }
 
 function fetchBreeds() {
@@ -43,10 +38,10 @@ function fetchBreeds() {
     });
 }
 
-function fetchCatByBreed(breedId) {
+function fetchCatsByBreed(breedId) {
   return axios
     .get(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`)
-    .then((response) => response.data[0])
+    .then((response) => response.data)
     .catch((error) => {
       throw error;
     });
@@ -69,21 +64,27 @@ breedSelect.addEventListener("change", (event) => {
 
   showLoader();
 
-  fetchCatByBreed(breedId)
-    .then((cat) => {
+  fetchBreeds()
+    .then((breeds) => {
+      const selectedBreed = breeds.find((breed) => breed.id === breedId);
+
+      if (selectedBreed) {
+        catBreed.textContent = selectedBreed.name;
+      }
+
+      return fetchCatsByBreed(breedId);
+    })
+    .then((cats) => {
       hideLoader();
+      clearCatList();
 
-      clearCatInfo();
+      cats.forEach((cat) => {
+        const catImage = document.createElement("img");
+        catImage.src = cat.url;
+        catImage.alt = "Cat Image";
 
-      catImage.src = cat.url;
-      catName.textContent = `Breed: ${cat.breeds[0].name}`;
-      catDescription.textContent = `Description: ${cat.breeds[0].description}`;
-      catTemperament.textContent = `Temperament: ${cat.breeds[0].temperament}`;
-
-      catInfo.appendChild(catImage);
-      catInfo.appendChild(catName);
-      catInfo.appendChild(catDescription);
-      catInfo.appendChild(catTemperament);
+        catList.appendChild(catImage);
+      });
 
       catInfo.style.display = "block";
     })
