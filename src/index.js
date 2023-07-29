@@ -1,7 +1,7 @@
 import SlimSelect from "slim-select";
     import axios from "axios";
 
-    axios.defaults.headers.common["x-api-key"] = "твій ключ";
+    axios.defaults.headers.common["x-api-key"] = "live_JN7SGLs0bBlgTEetxzYXuopzP3WrCT2FAmmQQyIkE7YGEUgp1MC2MI3IRIsQ9wYo";
 
     const breedSelect = document.querySelector(".breed-select");
     const catInfo = document.querySelector(".cat-info");
