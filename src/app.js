@@ -1,20 +1,19 @@
-const loaderImg = 'url(https://papik.pro/grafic/uploads/posts/2023-04/1682206914_papik-pro-p-stikeri-rizhii-kot-vektor-26.png)';
-
 import './style.css';
-
 import { fetchBreeds } from "./cat-api";
 
-const errorItem = document.querySelector('.error');
-errorItem.textContent = '';
-errorItem.style.display = 'none';
-const loaderItem = document.querySelector('.loader');
 
+const errorItem = document.querySelector('.error');
+const loaderItem = document.querySelector('.loader');
 const catInfo = document.querySelector('.cat-info');
 const select = document.querySelector('.breed-select');
-select.addEventListener('change', fetchCatByBreed);
+
+
+errorItem.textContent = '';
+errorItem.style.display = 'none';
 select.style.visibility = 'hidden';
 
 let storedBreeds = [];
+
 
 fetchBreeds()
     .then((data) => {
@@ -23,22 +22,22 @@ fetchBreeds()
     
         for (let i = 0; i < storedBreeds.length; i++) {
             const breed = storedBreeds[i];
+            if (!breed.image) continue;
             let option = document.createElement('option');
-            
-            if (!breed.image) continue
             option.value = breed.id;
             option.innerHTML = `${breed.name}`;
             select.appendChild(option);
-        };
+        }
+        
+
+        select.style.visibility = 'visible';
     })
     .catch((error) => console.log(error)); 
-        
-const api_key = `live_CIw3lZRkcpgh759C9YBXivIvAETipzFqRyXtOHa4sXukf5xIGdNG9JZOQ72DPlKH`
+
 
 function fetchCatByBreed() {
-    let breedId = select.value
-    
-    const url = "https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}"
+    let breedId = select.value;
+    const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`;
     
     return fetch(url, {
         headers: {
@@ -54,8 +53,7 @@ function fetchCatByBreed() {
         .then((data) => {
             let id = select.selectedIndex
             data = storedBreeds[id];
-        
-            return renderBreeds();
+            renderBreeds(); 
         })
         .catch((error) => errorMessage());
 };
@@ -70,6 +68,7 @@ function renderBreeds() {
     const title = document.createElement('h2');
     const description = document.createElement('p');
     const temperament = document.createElement('h3');
+
 
     image.style.display = 'block';
     image.src = `${storedBreeds[id].image.url}`;
@@ -89,25 +88,25 @@ function renderBreeds() {
     temperament.style.fontSize = `${28}px`;
     temperament.style.marginTop = 0;
 
+    catInfo.innerHTML = ''; 
     catInfo.append(image, title, description, temperament);
 };
 
-function onLoader() {
-
-    select.style.visibility = 'visible';
-   
-    fetchCatByBreed();
-};
-
-onLoader()
 
 function errorMessage() {
-
-    loaderItem.style.display = 'none';
+    loaderItem.style.display = 'none'; 
     loaderItem.textContent = '';
     errorItem.textContent = 'Oops! Something went wrong! Try reloading the page!';
     errorItem.style.display = 'block';
-
 };
 
-    
+
+select.addEventListener('change', fetchCatByBreed);
+
+onLoader();
+
+
+function onLoader() {
+    loaderItem.style.display = 'block'; 
+    fetchCatByBreed(); 
+};
