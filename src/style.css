@@ -115,16 +115,7 @@
   }
 }
 
-/* .error::after {
-  content: '';
-  display: block;
-  width: 700px;
-  height: 700px;
-  background-image: url('https://papik.pro/grafic/uploads/posts/2023-04/thumbs/1682206904_papik-pro-p-stikeri-rizhii-kot-vektor-6.jpg');
-  background-repeat: no-repeat;
-  margin-top: 80px;
-  margin-left: 100px;
-} */
+
 
 .breed-select {
   position: static;

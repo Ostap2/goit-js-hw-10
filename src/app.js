@@ -109,31 +109,5 @@ function errorMessage() {
     errorItem.style.display = 'block';
 
 };
-// // errorMessage()
 
-
-// const errorItem = document.querySelector('.error')
-// errorItem.textContent = '';
-// errorItem.style.visibility = 'hidden';
-// console.dir(errorItem);
-
-
-
-
-// catInfo.innerHTML +=`<img src="${image.src}" alt=""><h2>${title.textContent}</h2><p>${description.textContent}</p><h3>${temperament.textContent}</h3>`
-
-
-// const boxUrl = document.createElement('div')
-// errorItem.after(boxUrl);
-// boxUrl.style.display = 'block';
-// boxUrl.style.width = `${700}px`;
-// boxUrl.style.height = `${700}px`;
-// boxUrl.style.backgroundImage = 'url(https://t3.ftcdn.net/jpg/00/61/67/86/240_F_61678606_bNPFDZsyh2tG7Lxjm5Jd0Xd7QMeumObE.jpg)'
-// boxUrl.style.backgroundRepeat = 'no-repeat';
-
-// errorItem.style.display = 'none';
-    // errorItem.textContent = '';
-    // loaderItem.textContent = 'Loading data, please wait...';
-    // loaderItem.style.display = 'block'
-    // loaderItem.classList.replace('error', 'loader');
     
