@@ -1,5 +1,5 @@
 import './style.css';
-import { fetchBreeds } from "./cat-api";
+import { fetchBreeds, api_key } from "./cat-api"; 
 
 const errorItem = document.querySelector('.error');
 const loaderItem = document.querySelector('.loader');

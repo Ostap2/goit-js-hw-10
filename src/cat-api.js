@@ -6,7 +6,7 @@ const catInfo = document.querySelector('.cat-info')
 
 const breeds = `https://api.thecatapi.com/v1/breeds`;
 
-const api_key = "live_CIw3lZRkcpgh759C9YBXivIvAETipzFqRyXtOHa4sXukf5xIGdNG9JZOQ72DPlKH"
+export const api_key = "live_CIw3lZRkcpgh759C9YBXivIvAETipzFqRyXtOHa4sXukf5xIGdNG9JZOQ72DPlKH"
 
 export function fetchBreeds() {
     return fetch(breeds,{headers: {
