@@ -1,6 +1,6 @@
 const loaderImg = 'url(https://papik.pro/grafic/uploads/posts/2023-04/1682206914_papik-pro-p-stikeri-rizhii-kot-vektor-26.png)';
 
-import './css/styles.css';
+import './style.css';
 
 import { fetchBreeds } from "./cat-api";
 
