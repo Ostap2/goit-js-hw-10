@@ -1,4 +1,3 @@
-
 import './style.css';
 import { fetchBreeds } from "./cat-api";
 
@@ -19,7 +18,7 @@ function onLoader() {
         .then((data) => {
             data = data.filter(img => img.image?.url != null)
             storedBreeds = data;
-
+        
             for (let i = 0; i < storedBreeds.length; i++) {
                 const breed = storedBreeds[i];
                 if (!breed.image) continue;
@@ -28,12 +27,13 @@ function onLoader() {
                 option.innerHTML = `${breed.name}`;
                 select.appendChild(option);
             }
-
+            
             select.style.visibility = 'visible'; 
-            loaderItem.style.display = 'none';
+            
+            loaderItem.style.display = 'none'; 
         })
         .catch((error) => {
-            loaderItem.style.display = 'none'; 
+            loaderItem.style.display = 'none';
             errorMessage();
             console.error(error);
         });
@@ -42,7 +42,7 @@ function onLoader() {
 function fetchCatByBreed() {
     let breedId = select.value;
     const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`;
-
+    
     return fetch(url, {
         headers: {
             'x-api-key': api_key
@@ -51,18 +51,18 @@ function fetchCatByBreed() {
         .then((response) => {
             if (!response.ok) {
                 throw new Error(response.status);
-            }
+            } 
             return response.json();
         })
         .then((data) => {
             let id = select.selectedIndex
             data = storedBreeds[id];
-            renderBreeds();
+            renderBreeds(); 
         })
         .catch((error) => errorMessage());
 };
 
-function renderBreeds() {
+function renderBreeds() { 
     let id = select.selectedIndex;
 
     if (storedBreeds.length > 1) {
@@ -86,7 +86,7 @@ function renderBreeds() {
 
     description.textContent = `${storedBreeds[id].description}`;
     description.style.fontSize = `${24}px`;
-
+    
     temperament.textContent = `Temperament: ${storedBreeds[id].temperament}`;
     temperament.style.fontSize = `${28}px`;
     temperament.style.marginTop = 0;
@@ -96,7 +96,7 @@ function renderBreeds() {
 };
 
 function errorMessage() {
-    loaderItem.style.display = 'none';
+    loaderItem.style.display = 'none'; 
     loaderItem.textContent = '';
     errorItem.textContent = 'Oops! Something went wrong! Try reloading the page!';
     errorItem.style.display = 'block';
@@ -104,23 +104,4 @@ function errorMessage() {
 
 select.addEventListener('change', fetchCatByBreed);
 
-
 onLoader();
-
-
-const breeds = `https://api.thecatapi.com/v1/breeds`;
-const api_key = "live_CIw3lZRkcpgh759C9YBXivIvAETipzFqRyXtOHa4sXukf5xIGdNG9JZOQ72DPlKH"
-
-export function fetchBreeds() {
-    return fetch(breeds, {
-        headers: {
-            'x-api-key': api_key
-        }
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(response.status);
-            }
-            return response.json();
-        });
-};

@@ -57,8 +57,6 @@
   }
 }
 
-
-
 .error {
   position: absolute;
   display: block;
@@ -90,33 +88,16 @@
   animation: animloader 1s linear infinite alternate;
 }
 
-@keyframes animloader {
-  0% {
-    box-shadow: -38px -12px, -14px 0, 14px 0, 38px 0;
-  }
-  33% {
-    box-shadow: -38px 0px, -14px -12px, 14px 0, 38px 0;
-  }
-  66% {
-    box-shadow: -38px 0px, -14px 0, 14px -12px, 38px 0;
-  }
-  100% {
-    box-shadow: -38px 0, -14px 0, 14px 0, 38px -12px;
-  }
-}
-
-
-
 .breed-select {
-    height: 60px;
-    font-weight: 500px;
-    color: #000;
-    border: 2px solid #000;
-    font-size: 32px;
-    font-style: normal;
-    display: block;
-    position: static;
-    margin: 0 auto;
+  height: 60px;
+  font-weight: 500px;
+  color: #000;
+  border: 2px solid #000;
+  font-size: 32px;
+  font-style: normal;
+  display: block;
+  position: static;
+  margin: 0 auto;
 }
 
 .cat-info {
