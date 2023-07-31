@@ -108,20 +108,15 @@
 
 
 .breed-select {
-  position: static;
-  display: block;
-  width: 500px;
-  height: 60px;
-
-  font-weight: 500px;
-  font-style: normal;
-  font-size: 32px;
-  color: black;
-  border: 2px black solid;
-
-  margin-left: 100px;
-  margin-right: 100px;
-  margin-top: 10px;
+    height: 60px;
+    font-weight: 500px;
+    color: #000;
+    border: 2px solid #000;
+    font-size: 32px;
+    font-style: normal;
+    display: block;
+    position: static;
+    margin: 0 auto;
 }
 
 .cat-info {
