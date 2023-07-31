@@ -147,7 +147,9 @@
 }
 
 .cat-info p {
-  font-size: 24px;
+  width: 630px;
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 .cat-info h3 {
