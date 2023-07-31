@@ -1,4 +1,4 @@
-// cat-api.js
+
 import axios from "axios";
 
 axios.defaults.headers.common["x-api-key"] = "твій ключ";
@@ -16,8 +16,8 @@ export function fetchCatsByBreed(breedId) {
   return axios
     .get(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`)
     .then((response) => {
-      const catData = response.data[0]; // Отримуємо перший елемент з масиву
-      const catBreedInfo = catData.breeds[0]; // Отримуємо інформацію про кота з властивості breeds
+      const catData = response.data[0]; 
+      const catBreedInfo = catData.breeds[0]; 
 
       return {
         image: catData.url,
