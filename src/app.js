@@ -1,5 +1,5 @@
 import './style.css';
-import { fetchBreeds, api_key } from "./cat-api"; 
+import { fetchBreeds, api_key } from "./cat-api";
 
 const errorItem = document.querySelector('.error');
 const loaderItem = document.querySelector('.loader');
@@ -28,9 +28,9 @@ function onLoader() {
                 select.appendChild(option);
             }
             
-            select.style.visibility = 'visible'; 
-            
-            loaderItem.style.display = 'none'; 
+            select.style.visibility = 'visible';
+            loaderItem.style.display = 'none';
+            fetchCatByBreed();
         })
         .catch((error) => {
             loaderItem.style.display = 'none';
@@ -40,8 +40,13 @@ function onLoader() {
 };
 
 function fetchCatByBreed() {
-    let breedId = select.value;
-    const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`;
+    const abyssinianBreedId = storedBreeds.find(breed => breed.name === 'Abyssinian')?.id;
+    if (!abyssinianBreedId) {
+        errorMessage();
+        return;
+    }
+
+    const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${abyssinianBreedId}`;
     
     return fetch(url, {
         headers: {
@@ -91,12 +96,12 @@ function renderBreeds() {
     temperament.style.fontSize = `${28}px`;
     temperament.style.marginTop = 0;
 
-    catInfo.innerHTML = ''; 
+    catInfo.innerHTML = '';
     catInfo.append(image, title, description, temperament);
 };
 
 function errorMessage() {
-    loaderItem.style.display = 'none'; 
+    loaderItem.style.display = 'none';
     loaderItem.textContent = '';
     errorItem.textContent = 'Oops! Something went wrong! Try reloading the page!';
     errorItem.style.display = 'block';
