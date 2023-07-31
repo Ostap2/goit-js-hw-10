@@ -2,7 +2,7 @@ const loaderImg = 'url(https://papik.pro/grafic/uploads/posts/2023-04/1682206914
 
 import './css/styles.css';
 
-import { fetchBreeds } from "./js/cat-api";
+import { fetchBreeds } from "./cat-api";
 
 const errorItem = document.querySelector('.error');
 errorItem.textContent = '';
