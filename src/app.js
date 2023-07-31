@@ -1,5 +1,4 @@
-
-import { fetchBreeds, fetchCatsByBreed } from "./index.js";
+import { fetchBreeds, fetchCatsByBreed } from "./cat-api.js";
 
 const breedSelect = document.querySelector(".breed-select");
 const catInfo = document.querySelector(".cat-info");
@@ -29,6 +28,12 @@ function clearCatList() {
   catList.innerHTML = "";
 }
 
+function populateBreedSelect(breeds) {
+  breedSelect.innerHTML = breeds
+    .map((breed) => `<option value="${breed.id}">${breed.name}</option>`)
+    .join("");
+}
+
 fetchBreeds()
   .then((breeds) => {
     populateBreedSelect(breeds);
@@ -36,12 +41,6 @@ fetchBreeds()
   .catch(() => {
     showError();
   });
-
-function populateBreedSelect(breeds) {
-  breedSelect.innerHTML = breeds
-    .map((breed) => `<option value="${breed.id}">${breed.name}</option>`)
-    .join("");
-}
 
 breedSelect.addEventListener("change", (event) => {
   const breedId = event.target.value;
