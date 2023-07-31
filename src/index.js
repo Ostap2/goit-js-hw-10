@@ -45,14 +45,19 @@ function populateBreedSelect(breeds) {
     .join("");
 }
 
+
+
 function fetchCatsByBreed(breedId) {
   return axios
-    .get(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`)
+    .get(`https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}&limit=5`)
     .then((response) => response.data)
     .catch((error) => {
       throw error;
     });
 }
+
+
+
 
 fetchBreeds()
   .then((breeds) => {
@@ -95,3 +100,4 @@ breedSelect.addEventListener("change", (event) => {
       showError();
     });
 });
+
