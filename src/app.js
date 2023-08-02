@@ -1,6 +1,5 @@
 import './style.css';
 import { fetchBreeds, api_key } from "./cat-api";
-import axios from 'axios'; 
 
 const errorItem = document.querySelector('.error');
 const loaderItem = document.querySelector('.loader');
@@ -47,18 +46,19 @@ function fetchCatByBreed() {
         return;
     }
 
+
     const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${abyssinianBreedId}`;
 
-    axios.get(url, {
+    return fetch(url, {
         headers: {
-            'x-api-key': api_key 
+            'x-api-key': api_key
         }
     })
         .then((response) => {
             if (!response.ok) {
                 throw new Error(response.status);
             } 
-            return response.data;
+            return response.json();
         })
         .then((data) => {
             let id = select.selectedIndex
