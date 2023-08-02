@@ -40,14 +40,13 @@ function onLoader() {
 };
 
 function fetchCatByBreed() {
-    const abyssinianBreedId = storedBreeds.find(breed => breed.name === 'Abyssinian')?.id;
-    if (!abyssinianBreedId) {
+    const selectedBreedId = select.value; 
+    if (!selectedBreedId) {
         errorMessage();
         return;
     }
 
-
-    const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${abyssinianBreedId}`;
+    const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${selectedBreedId}`;
 
     return fetch(url, {
         headers: {
@@ -61,8 +60,7 @@ function fetchCatByBreed() {
             return response.json();
         })
         .then((data) => {
-            let id = select.selectedIndex
-            data = storedBreeds[id];
+            
             renderBreeds(); 
         })
         .catch((error) => errorMessage());
