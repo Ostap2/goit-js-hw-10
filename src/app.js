@@ -30,7 +30,6 @@ function onLoader() {
             
             select.style.visibility = 'visible';
             loaderItem.style.display = 'none';
-            fetchCatByBreed();
         })
         .catch((error) => {
             loaderItem.style.display = 'none';
