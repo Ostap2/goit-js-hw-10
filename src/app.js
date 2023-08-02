@@ -45,7 +45,6 @@ function fetchCatByBreed() {
         return;
     }
 
-    
     return fetch(url, {
         headers: {
             'x-api-key': api_key
