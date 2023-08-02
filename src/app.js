@@ -1,4 +1,5 @@
 import './style.css';
+import { fetchBreeds, api_key } from "./cat-api";
 import axios from 'axios'; 
 
 const errorItem = document.querySelector('.error');
