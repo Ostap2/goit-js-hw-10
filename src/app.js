@@ -30,6 +30,7 @@ function onLoader() {
             
             select.style.visibility = 'visible';
             loaderItem.style.display = 'none';
+            fetchCatByBreed();
         })
         .catch((error) => {
             loaderItem.style.display = 'none';
@@ -44,6 +45,9 @@ function fetchCatByBreed() {
         errorMessage();
         return;
     }
+
+
+    const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${abyssinianBreedId}`;
 
     return fetch(url, {
         headers: {
