@@ -16,7 +16,6 @@ function onLoader() {
     loaderItem.style.display = 'block';
     fetchBreeds()
         .then((data) => {
-            data = data.filter(img => img.image?.url != null)
             storedBreeds = data;
         
             for (let i = 0; i < storedBreeds.length; i++) {
