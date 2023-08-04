@@ -1,29 +1,21 @@
 const errorItem = document.querySelector('.error');
-const loaderItem = document.querySelector('.loader');
-const catInfo = document.querySelector('.cat-info');
-const select = document.querySelector('.breed-select');
 
-export const api_key = "live_CIw3lZRkcpgh759C9YBXivIvAETipzFqRyXtOHa4sXukf5xIGdNG9JZOQ72DPlKH";
+const loaderItem = document.querySelector('.loader');
+
+const catInfo = document.querySelector('.cat-info')
+
 const breeds = `https://api.thecatapi.com/v1/breeds`;
 
-errorItem.textContent = '';
-errorItem.style.display = 'none';
-select.style.visibility = 'hidden';
-
-let storedBreeds = [];
+export const api_key = "live_CIw3lZRkcpgh759C9YBXivIvAETipzFqRyXtOHa4sXukf5xIGdNG9JZOQ72DPlKH"
 
 export function fetchBreeds() {
-    return axios.get(breeds, { headers: { 'x-api-key': api_key } })
+    return fetch(breeds,{headers: {
+    'x-api-key': api_key
+    }})
         .then((response) => {
-            if (!response.data) {
-                throw new Error('No data returned');
-            }
-            storedBreeds = response.data;
-            return storedBreeds;
+        if (!response.ok) {
+        throw new Error(response.status);
+        }
+        return response.json();
         })
-        .catch((error) => {
-            loaderItem.style.display = 'none';
-            errorMessage();
-            console.error(error);
-        });
-}
+};
