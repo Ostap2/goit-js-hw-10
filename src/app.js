@@ -1,5 +1,5 @@
 import './style.css';
-import { fetchBreeds, api_key } from "./cat-api";
+import { fetchBreeds } from "./cat-api";
 
 const errorItem = document.querySelector('.error');
 const loaderItem = document.querySelector('.loader');
@@ -10,15 +10,10 @@ errorItem.textContent = '';
 errorItem.style.display = 'none';
 select.style.visibility = 'hidden';
 
-let storedBreeds = [];
-
 function onLoader() {
     loaderItem.style.display = 'block';
     fetchBreeds()
-        .then((data) => {
-            
-            storedBreeds = data;
-        
+        .then(() => {
             for (let i = 0; i < storedBreeds.length; i++) {
                 const breed = storedBreeds[i];
                 if (!breed.image) continue;
@@ -30,6 +25,11 @@ function onLoader() {
             
             select.style.visibility = 'visible';
             loaderItem.style.display = 'none';
+
+
+            new SlimSelect({
+                select: '.breed-select'
+            });
         })
         .catch((error) => {
             loaderItem.style.display = 'none';
@@ -47,19 +47,18 @@ function fetchCatByBreed() {
 
     const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${selectedBreedId}`;
 
-    return fetch(url, {
+    return axios.get(url, {
         headers: {
             'x-api-key': api_key
         }
     })
         .then((response) => {
-            if (!response.ok) {
-                throw new Error(response.status);
-            } 
-            return response.json();
+            if (!response.data) {
+                throw new Error('No data returned');
+            }
+            return response.data;
         })
         .then((data) => {
-            
             renderBreeds(); 
         })
         .catch((error) => errorMessage());
