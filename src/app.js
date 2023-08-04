@@ -1,5 +1,5 @@
 import './style.css';
-import { fetchBreeds } from "./cat-api"; 
+import { fetchBreeds, api_key } from "./cat-api";
 
 const errorItem = document.querySelector('.error');
 const loaderItem = document.querySelector('.loader');
@@ -13,35 +13,31 @@ select.style.visibility = 'hidden';
 let storedBreeds = [];
 
 function onLoader() {
-  loaderItem.style.display = 'block';
-  fetchBreeds()
-    .then((data) => {
-      storedBreeds = data;
+    loaderItem.style.display = 'block';
+    fetchBreeds()
+        .then((data) => {
+            
+            storedBreeds = data;
+        
+            for (let i = 0; i < storedBreeds.length; i++) {
+                const breed = storedBreeds[i];
+                if (!breed.image) continue;
+                let option = document.createElement('option');
+                option.value = breed.id;
+                option.innerHTML = `${breed.name}`;
+                select.appendChild(option);
+            }
+            
+            select.style.visibility = 'visible';
+            loaderItem.style.display = 'none';
+        })
+        .catch((error) => {
+            loaderItem.style.display = 'none';
+            errorMessage();
+            console.error(error);
+        });
+};
 
-      select.innerHTML = '';
-
-      for (let i = 0; i < storedBreeds.length; i++) {
-        const breed = storedBreeds[i];
-        if (!breed.image) continue;
-        let option = document.createElement('option');
-        option.value = breed.id;
-        option.innerHTML = `${breed.name}`;
-        select.appendChild(option);
-      }
-
-      select.style.visibility = 'visible';
-      loaderItem.style.display = 'none';
-
-      new SlimSelect({
-        select: '#selectElement',
-      });
-    })
-    .catch((error) => {
-      loaderItem.style.display = 'none';
-      errorMessage();
-      console.error(error);
-    });
-}
 function fetchCatByBreed() {
     const selectedBreedId = select.value; 
     if (!selectedBreedId) {
