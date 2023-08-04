@@ -1,5 +1,8 @@
+import SlimSelect from 'slim-select';
+import axios from 'axios';
 import './style.css';
-import { fetchBreeds } from "./cat-api";
+import 'slim-select/dist/slimselect.css';
+import { fetchBreeds, api_key } from './cat-api';
 
 const errorItem = document.querySelector('.error');
 const loaderItem = document.querySelector('.loader');
@@ -11,98 +14,77 @@ errorItem.style.display = 'none';
 select.style.visibility = 'hidden';
 
 function onLoader() {
-    loaderItem.style.display = 'block';
-    fetchBreeds()
-        .then(() => {
-            for (let i = 0; i < storedBreeds.length; i++) {
-                const breed = storedBreeds[i];
-                if (!breed.image) continue;
-                let option = document.createElement('option');
-                option.value = breed.id;
-                option.innerHTML = `${breed.name}`;
-                select.appendChild(option);
-            }
-            
-            select.style.visibility = 'visible';
-            loaderItem.style.display = 'none';
+  loaderItem.style.display = 'block';
+  fetchBreeds()
+    .then(data => {
+      const options = data
+        .map(({ id, name }) => `<option value=${id}>${name}</option>`)
+        .join('');
+      select.innerHTML = options;
 
+      select.style.visibility = 'visible';
+      loaderItem.style.display = 'none';
 
-            new SlimSelect({
-                select: '.breed-select'
-            });
-        })
-        .catch((error) => {
-            loaderItem.style.display = 'none';
-            errorMessage();
-            console.error(error);
-        });
-};
+      new SlimSelect({
+        select: '.breed-select',
+      });
+    })
+    .catch(error => {
+      loaderItem.style.display = 'none';
+      errorMessage();
+      console.error(error);
+    });
+}
 
 function fetchCatByBreed() {
-    const selectedBreedId = select.value; 
-    if (!selectedBreedId) {
-        errorMessage();
-        return;
-    }
+  const selectedBreedId = select.value;
+  if (!selectedBreedId) {
+    errorMessage();
+    return;
+  }
 
-    const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${selectedBreedId}`;
+  const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${selectedBreedId}`;
 
-    return axios.get(url, {
-        headers: {
-            'x-api-key': api_key
-        }
+  return axios
+    .get(url, {
+      headers: {
+        'x-api-key': api_key,
+      },
     })
-        .then((response) => {
-            if (!response.data) {
-                throw new Error('No data returned');
-            }
-            return response.data;
-        })
-        .then((data) => {
-            renderBreeds(); 
-        })
-        .catch((error) => errorMessage());
-};
+    .then(response => {
+      if (!response.data[0]) {
+        throw new Error('No data returned');
+      }
 
-function renderBreeds() { 
-    let id = select.selectedIndex;
+      return response.data;
+    })
+    .then(data => {
+      renderBreeds(data[0]);
+    })
+    .catch(error => {
+      console.log(123);
+      errorMessage(error.message);
+    });
+}
 
-    if (storedBreeds.length > 1) {
-        catInfo.innerHTML = '';
-    }
-    const image = document.createElement('img');
-    const title = document.createElement('h2');
-    const description = document.createElement('p');
-    const temperament = document.createElement('h3');
-
-    image.style.display = 'block';
-    image.src = `${storedBreeds[id].image.url}`;
-    image.style.width = `${700}px`;
-    image.style.height = `${600}px`;
-    image.style.backgroundSize = 'cover';
-
-    title.textContent = `${storedBreeds[id].name}`;
-    title.style.fontSize = `${38}px`;
-    title.style.marginBottom = 0;
-    title.style.backgroundColor = 'rgb(255, 255, 255)';
-
-    description.textContent = `${storedBreeds[id].description}`;
-    description.style.fontSize = `${24}px`;
-    
-    temperament.textContent = `Temperament: ${storedBreeds[id].temperament}`;
-    temperament.style.fontSize = `${28}px`;
-    temperament.style.marginTop = 0;
-
+function renderBreeds(data) {
+  if (!data) {
     catInfo.innerHTML = '';
-    catInfo.append(image, title, description, temperament);
-};
+    return;
+  }
+
+  const markup = `
+    <div><img src="${data.url}" alt="${data.breeds[0].name}"><h2>${data.breeds[0].name}</h2><p>${data.breeds[0].description}</p><p>Temperament:${data.breeds[0].temperament}</p></div>`;
+
+  catInfo.innerHTML = markup;
+}
 
 function errorMessage() {
-    loaderItem.style.display = 'none';
-    loaderItem.textContent = '';
-    errorItem.textContent = 'Oops! Something went wrong! Try reloading the page!';
-    errorItem.style.display = 'block';
-};
+  loaderItem.style.display = 'none';
+  loaderItem.textContent = '';
+  errorItem.textContent = 'Oops! Something went wrong! Try reloading the page!';
+  errorItem.style.display = 'block';
+}
 
 select.addEventListener('change', fetchCatByBreed);
 

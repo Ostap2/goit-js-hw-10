@@ -1,6 +1,3 @@
-import axios from 'axios';
-import SlimSelect from 'slim-select';
-
 const errorItem = document.querySelector('.error');
 const loaderItem = document.querySelector('.loader');
 const catInfo = document.querySelector('.cat-info');
