@@ -15,48 +15,55 @@ let storedBreeds = [];
 function onLoader() {
     loaderItem.style.display = 'block';
     fetchBreeds()
-      .then((data) => {
-        storedBreeds = data;
+        .then((data) => {
+            
+            storedBreeds = data;
         
-        renderBreeds();
-  
-        select.style.visibility = 'visible';
-        loaderItem.style.display = 'none';
-      })
-      .catch((error) => {
-        loaderItem.style.display = 'none';
-        errorMessage();
-        console.error(error);
-      });
-  }
-  
+            for (let i = 0; i < storedBreeds.length; i++) {
+                const breed = storedBreeds[i];
+                if (!breed.image) continue;
+                let option = document.createElement('option');
+                option.value = breed.id;
+                option.innerHTML = `${breed.name}`;
+                select.appendChild(option);
+            }
+            
+            select.style.visibility = 'visible';
+            loaderItem.style.display = 'none';
+        })
+        .catch((error) => {
+            loaderItem.style.display = 'none';
+            errorMessage();
+            console.error(error);
+        });
+};
 
-  function fetchCatByBreed() {
+function fetchCatByBreed() {
     const selectedBreedId = select.value; 
     if (!selectedBreedId) {
-      errorMessage();
-      return;
+        errorMessage();
+        return;
     }
-  
+
     const url = `https://api.thecatapi.com/v1/images/search?breed_ids=${selectedBreedId}`;
-  
+
     return fetch(url, {
-      headers: {
-        'x-api-key': api_key
-      }
+        headers: {
+            'x-api-key': api_key
+        }
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.status);
-        } 
-        return response.json();
-      })
-      .then((data) => {
-        renderBreeds(data);
-      })
-      .catch((error) => errorMessage());
-  }
-  
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(response.status);
+            } 
+            return response.json();
+        })
+        .then((data) => {
+            
+            renderBreeds(); 
+        })
+        .catch((error) => errorMessage());
+};
 
 function renderBreeds() { 
     let id = select.selectedIndex;
