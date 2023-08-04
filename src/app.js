@@ -1,6 +1,5 @@
 import './style.css';
-import { fetchBreeds, api_key } from "./cat-api";
-import SlimSelect from 'slim-select';
+import { fetchBreeds } from "./cat-api"; 
 
 const errorItem = document.querySelector('.error');
 const loaderItem = document.querySelector('.loader');
@@ -19,7 +18,6 @@ function onLoader() {
     .then((data) => {
       storedBreeds = data;
 
-
       select.innerHTML = '';
 
       for (let i = 0; i < storedBreeds.length; i++) {
@@ -33,7 +31,6 @@ function onLoader() {
 
       select.style.visibility = 'visible';
       loaderItem.style.display = 'none';
-
 
       new SlimSelect({
         select: '#selectElement',
