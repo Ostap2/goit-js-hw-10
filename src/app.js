@@ -16,6 +16,7 @@ function onLoader() {
     loaderItem.style.display = 'block';
     fetchBreeds()
         .then((data) => {
+            
             storedBreeds = data;
         
             for (let i = 0; i < storedBreeds.length; i++) {
